@@ -1,11 +1,11 @@
 function loaderOn(callback, n, type) {
 	document.getElementById('processing').style.display = 'block';
-		if (! callback === undefined) {
-			setTimeout(function(){
-				document.getElementById('processing').style.display = 'block';
-				callback(n, type);
-			}, 1);			
-		}
+	if (callback instanceof Function) {
+		setTimeout(function(){
+			document.getElementById('processing').style.display = 'block';
+			callback(n, type);
+		}, 1);			
+	}
 }
 
 function loaderOff() {

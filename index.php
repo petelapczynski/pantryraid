@@ -114,7 +114,6 @@ include('session_list.php');
 				catch(PDOException $e) {
 					echo "Error: " . $e->getMessage();
 				}
-				$conn = null;
 			?>
 			
 		</table>
@@ -157,12 +156,24 @@ include('session_list.php');
 					<label class="w3-text-black">Location</label>
 					<input name="itemLoc" type="text" list="dlLoc" class="w3-input w3-border required"/>
 					<datalist id="dlLoc">
-						<option>Downstairs Freezer</option>
-						<option>Downstairs Pantry</option>
-						<option>Refrigerator</option>
-						<option>Upstairs cupboard</option>
-						<option>Upstairs Freezer</option>
-						<option>Upstairs Pantry</option>
+					    <?php 
+							//Get unique locations from list
+							try {
+								$stmt = $conn->prepare("SELECT DISTINCT location FROM list_items WHERE list_id = ? ORDER BY location");
+								$stmt->execute([$_SESSION['list_id']]);
+								foreach ($stmt as $data) {
+									echo '<option>' . $data['location'] . '</option>';
+								}
+							}
+							catch(PDOException $e) {
+							    echo '<option>Downstairs Freezer</option>
+        						<option>Downstairs Pantry</option>
+        						<option>Refrigerator</option>
+        						<option>Upstairs Cupboard</option>
+        						<option>Upstairs Freezer</option>
+        						<option>Upstairs Pantry</option>';
+							}
+						?>
 					</datalist>
 				</p>
 				<p>     
